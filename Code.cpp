@@ -6,6 +6,7 @@
 
   The following variables are automatically generated and updated when changes are made to the Thing
 
+  float air_quality;
   CloudTemperatureSensor temperature;
   CloudRelativeHumidity humidity;
 
@@ -73,6 +74,8 @@ void loop() {
   delay(2000); // Wait a few seconds between measurements.
 }
 
+
+
 /*
   Since Humidity is READ_WRITE variable, onHumidityChange() is
   executed every time a new value is received from IoT Cloud.
@@ -92,5 +95,6 @@ void onTemperatureChange()  {
   Serial.print("New temperature received: ");
   Serial.println(temperature);
 }
+
 
 
