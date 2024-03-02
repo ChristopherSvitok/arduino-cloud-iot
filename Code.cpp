@@ -25,6 +25,18 @@
 
 DHT my_sensor(DHTPIN, DHTTYPE);
 
+//DUST SENSOR
+int pin = 5;
+unsigned long duration;
+unsigned long starttime;
+unsigned long sampletime_ms = 30000;//sample 30s ;
+unsigned long lowpulseoccupancy = 0;
+float ratio = 0;
+float concentration = 0;
+//DUST SENSOR
+
+
+
 void setup() {
   // Initialize serial and wait for port to open:
   Serial.begin(9600);
@@ -49,6 +61,11 @@ void setup() {
 
   // Initialize DHT sensor
   my_sensor.begin();
+  //DUST SENSOR
+  pinMode(pin,INPUT);
+  starttime = millis();//get the current time;
+  //DUST SENSOR
+
 }
 
 void loop() {
@@ -71,6 +88,27 @@ void loop() {
     humidity = newHumidity;
   }
 
+
+  //DUST SENSOR
+      duration = pulseIn(pin, LOW);
+    lowpulseoccupancy = lowpulseoccupancy+duration;
+
+    if ((millis()-starttime) > sampletime_ms)//if the sample time == 30s
+    {
+        ratio = lowpulseoccupancy/(sampletime_ms*10.0);  // Integer percentage 0=>100
+        concentration = 1.1*pow(ratio,3)-3.8*pow(ratio,2)+520*ratio+0.62; // using spec sheet curve
+        //Serial.print(lowpulseoccupancy);
+        //Serial.print(",");
+        //Serial.print(ratio);
+        //Serial.print(",");
+        Serial.println(concentration);
+        lowpulseoccupancy = 0;
+        starttime = millis();
+        //Update cloud variables
+        air_quality = concentration;
+    }
+    //DUST SENSOR
+
   delay(2000); // Wait a few seconds between measurements.
 }
 
@@ -79,22 +117,21 @@ void loop() {
 /*
   Since Humidity is READ_WRITE variable, onHumidityChange() is
   executed every time a new value is received from IoT Cloud.
-*/
+
 void onHumidityChange()  {
   // Add your code here to act upon Humidity change
   Serial.print("New humidity received: ");
   Serial.println(humidity);
 }
 
-/*
   Since Temperature is READ_WRITE variable, onTemperatureChange() is
   executed every time a new value is received from IoT Cloud.
-*/
+
 void onTemperatureChange()  {
   // Add your code here to act upon Temperature change
   Serial.print("New temperature received: ");
   Serial.println(temperature);
 }
-
+*/
 
 
