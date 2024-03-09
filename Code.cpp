@@ -6,6 +6,7 @@
 
   The following variables are automatically generated and updated when changes are made to the Thing
 
+    int general_air_quality;
   float air_quality;
   CloudTemperatureSensor temperature;
   CloudRelativeHumidity humidity;
